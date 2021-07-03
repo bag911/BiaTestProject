@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="title_text_third">#ffa000</color>
+    <color name="secondary_text_third">#ffd149</color>
+
+    <color name="title_text_fourth">#00c853</color>
+    <color name="secondary_text_fourth">#50B868</color>
+
+
+    <color name="deep_orange_100">#ffccbc</color>
+    <color name="deep_orange_100_light">#ffffee</color>
+    <color name="deep_orange_100_dark">#CB8C9B</color>
+    <color name="yellow_100">#fff9c4</color>
+    <color name="yellow_100_light">#fffff7</color>
+    <color name="yellow_100_dark">#cbc693</color>
+    <color name="light_green_100">#dcedc8</color>
+    <color name="light_green_100_light">#fffffb</color>
+    <color name="light_green_100_dark">#aabb97</color>
+    <color name="cyan_100">#b2ebf2</color>
+    <color name="cyan_100_light">#e5ffff</color>
+    <color name="cyan_100_dark">#81b9bf</color>
+    <color name="deep_purple_100">#d1c4e9</color>
+    <color name="deep_purple_100_light">#fff7ff</color>
+    <color name="deep_purple_100_dark">#a094b7</color>
+</resources>
