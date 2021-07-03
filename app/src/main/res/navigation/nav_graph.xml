@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/statFragment">
+
+    <fragment
+        android:id="@+id/statFragment"
+        android:name="bag.dev.biatestproject.StatFragment"
+        android:label="fragment_stat"
+        tools:layout="@layout/fragment_stat" >
+        <argument
+            android:name="pointer"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <action
+            android:id="@+id/action_statFragment_to_viewPagerFragment"
+            app:destination="@id/viewPagerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewPagerFragment"
+        android:name="bag.dev.biatestproject.ViewPagerFragment"
+        android:label="fragment_view_pager"
+        tools:layout="@layout/fragment_view_pager" >
+        <action
+            android:id="@+id/action_viewPagerFragment_to_statFragment"
+            app:destination="@id/statFragment" />
+    </fragment>
+</navigation>
