@@ -1,4 +1,4 @@
-package bag.dev.biatestproject
+package bag.dev.biatestproject.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,20 +8,30 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import bag.dev.biatestproject.NavViewModel
+import bag.dev.biatestproject.R
 import bag.dev.biatestproject.databinding.FragmentStatBinding
+
+
+
 
 class StatFragment : Fragment() {
 
     private var _statBinding:FragmentStatBinding ? = null
     private val statBinding get() = _statBinding!!
 
-    private val navViewModel:NavViewModel by activityViewModels()
+    private val navViewModel: NavViewModel by activityViewModels()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(false)
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _statBinding = FragmentStatBinding.inflate(inflater,container,false)
+        requireActivity()
         return statBinding.root
     }
 
@@ -29,7 +39,11 @@ class StatFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //TODO Выгрузка данных при открытии фрагмента по id
-//        if(navViewModel.title != "Empty"){
+//        if(navViewModel.fromId > 0){
+            //TODO findTerminalById()
+//        }
+//        if(navViewModel.toId > 0){
+            //TODO findTerminalById()
 //        }
 
         statBinding.from.setOnClickListener {
@@ -42,5 +56,6 @@ class StatFragment : Fragment() {
             findNavController().navigate(R.id.action_statFragment_to_viewPagerFragment,bundle)
         }
     }
+
 
 }

@@ -1,4 +1,4 @@
-package bag.dev.biatestproject
+package bag.dev.biatestproject.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,13 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.activityViewModels
 
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import bag.dev.biatestproject.databinding.FragmentViewPagerBinding
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.coroutines.*
 
 
 class ViewPagerFragment : Fragment() {

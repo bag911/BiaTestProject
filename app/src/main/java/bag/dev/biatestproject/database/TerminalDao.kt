@@ -24,4 +24,15 @@ interface TerminalDao {
 
 //    @Query("SELECT * FROM terminal_table ORDER BY age ASC")
 //    fun sortDataByAge(): LiveData<List<Terminal>>
+
+
+    /*TODO: Сделать два метода
+    1 - readAllFromData()
+        Получение списка с значением receiveCargo = true
+
+    2 - readAllToData()
+        Получение списка с значением receiveCargo = true
+        default = true
+        giveoutCargo = true
+     */
 }

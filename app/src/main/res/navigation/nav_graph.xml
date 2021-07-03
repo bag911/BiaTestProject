@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/statFragment"
-        android:name="bag.dev.biatestproject.StatFragment"
+        android:name="bag.dev.biatestproject.fragments.StatFragment"
         android:label="fragment_stat"
         tools:layout="@layout/fragment_stat" >
         <argument
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/viewPagerFragment"
-        android:name="bag.dev.biatestproject.ViewPagerFragment"
+        android:name="bag.dev.biatestproject.fragments.ViewPagerFragment"
         android:label="fragment_view_pager"
         tools:layout="@layout/fragment_view_pager" >
         <action
