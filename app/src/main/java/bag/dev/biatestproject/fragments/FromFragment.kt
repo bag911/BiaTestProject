@@ -1,26 +1,37 @@
 package bag.dev.biatestproject.fragments
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import bag.dev.biatestproject.NavViewModel
 import bag.dev.biatestproject.R
 import bag.dev.biatestproject.database.Terminal
+import bag.dev.biatestproject.database.TerminalViewModel
 import bag.dev.biatestproject.databinding.FragmentFromBinding
+import bag.dev.biatestproject.hideKeyboard
 
-class FromFragment : Fragment() {
+class FromFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private var _fromBinding:FragmentFromBinding ? = null
     private val fromBinding get() = _fromBinding!!
     private val navViewModel: NavViewModel by activityViewModels()
+    private lateinit var terminalViewModel:TerminalViewModel
     private val adapter = FromListAdapter(emptyArray())
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,8 +43,8 @@ class FromFragment : Fragment() {
         fromBinding.fromRcView.layoutManager = LinearLayoutManager(requireContext())
 
         //TerminalViewModel //Todo uncomment this
-//        terminalViewModel = ViewModelProvider(this).get(TerminalViewModel::class.java)
-//        terminalViewModel.readAllData.observe(viewLifecycleOwner, Observer {terminal ->
+        terminalViewModel = ViewModelProvider(this).get(TerminalViewModel::class.java)
+//        terminalViewModel.readAllFromData.observe(viewLifecycleOwner, Observer {terminal ->
 //            adapter.setData(terminal)
 //        })
 
@@ -78,5 +89,42 @@ class FromFragment : Fragment() {
             this.terminalList = terminal
             notifyDataSetChanged()
         }
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu,menu)
+        val search = menu.findItem(R.id.search)
+        val searchView = search?.actionView as? SearchView
+        searchView?.isSubmitButtonEnabled = true
+
+        searchView?.setOnQueryTextListener(this)
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if (query != null){
+            searchString(query)
+            hideKeyboard()
+        }
+        return true
+    }
+
+    override fun onQueryTextChange(query: String?): Boolean {
+        if (query != null){
+            searchString(query)
+
+        }
+
+        return true
+    }
+
+    private fun searchString(query:String){
+        val searchQuery = "%$query%"
+
+        terminalViewModel.searchFromDatabase(searchQuery).observe(viewLifecycleOwner,{list->
+            list.let {
+                adapter.setData(it)
+            }
+        })
     }
 }

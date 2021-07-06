@@ -12,7 +12,7 @@ data class Terminal (
     var longitude:Double,
     var receiveCargo: Boolean,
     var giveoutCargo: Boolean,
-    var default: Boolean
+    var defaultState: Boolean
     //TODO: Добавить ворктейбл в бд
 //    var worktable: List<>,
     ){

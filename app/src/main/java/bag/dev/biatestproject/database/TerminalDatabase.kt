@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Terminal::class], version = 1, exportSchema = false)
+@Database(entities = [Terminal::class, Transactions::class], version = 1, exportSchema = false)
 abstract class TerminalDatabase: RoomDatabase() {
     abstract fun terminalDao(): TerminalDao
 

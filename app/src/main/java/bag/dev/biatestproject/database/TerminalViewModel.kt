@@ -12,6 +12,8 @@ class TerminalViewModel(application: Application) : AndroidViewModel(application
     val readAllData: LiveData<List<Terminal>>
     val sortedDataByName: LiveData<List<Terminal>>
 //    val sortedDataByAge: LiveData<List<Terminal>>
+    val readAllFromData:LiveData<List<Terminal>>
+    val readAllToData:LiveData<List<Terminal>>
     private val repository: TerminalRepository
 
     init {
@@ -20,6 +22,8 @@ class TerminalViewModel(application: Application) : AndroidViewModel(application
         readAllData = repository.readAllData
         sortedDataByName = repository.sortedDataByName
 //        sortedDataByAge = repository.sortedDataByAge
+        readAllFromData = repository.readAllFromData
+        readAllToData = repository.readAllToData
     }
 
 //    fun addUser(user:User){
@@ -27,4 +31,18 @@ class TerminalViewModel(application: Application) : AndroidViewModel(application
 //            repository.addUser(user)
 //        }
 //    }
+
+    fun searchFromDatabase(searchQuery:String):LiveData<List<Terminal>>{
+        return repository.searchFromDatabase(searchQuery)
+    }
+
+    fun searchToDatabase(searchQuery:String):LiveData<List<Terminal>>{
+        return repository.searchToDatabase(searchQuery)
+    }
+
+    fun saveTransaction(transactions: Transactions){
+        viewModelScope.launch (Dispatchers.IO){
+            repository.saveTransaction(transactions)
+        }
+    }
 }

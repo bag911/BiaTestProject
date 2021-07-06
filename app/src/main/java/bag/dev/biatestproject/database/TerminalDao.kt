@@ -9,9 +9,9 @@ import androidx.room.Query
 
 @Dao
 interface TerminalDao {
-    //TODO: Сделать сохранение транзакции в бд
-//    @Insert(onConflict = OnConflictStrategy.IGNORE)
-//    suspend fun addUser(terminal:Terminal)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun saveTransaction(transactions: Transactions)
 
     @Query("SELECT * FROM terminal_table ORDER BY id ASC")
     fun readAllData(): LiveData<List<Terminal>>
@@ -26,13 +26,17 @@ interface TerminalDao {
 //    fun sortDataByAge(): LiveData<List<Terminal>>
 
 
-    /*TODO: Сделать два метода
-    1 - readAllFromData()
-        Получение списка с значением receiveCargo = true
+    @Query("SELECT * FROM  terminal_table WHERE receiveCargo = 1")
+    fun readAllFromData():LiveData<List<Terminal>>
 
-    2 - readAllToData()
-        Получение списка с значением receiveCargo = true
-        default = true
-        giveoutCargo = true
-     */
+    @Query("SELECT * FROM terminal_table WHERE defaultState = 1 AND giveoutCargo = 1")
+    fun readAllToData():LiveData<List<Terminal>>
+
+    @Query("SELECT * FROM terminal_table WHERE receiveCargo = 1 AND name LIKE :searchQuery")
+    fun searchFromDatabase(searchQuery:String): LiveData<List<Terminal>>
+
+    @Query("SELECT * FROM terminal_table WHERE defaultState = 1 AND giveoutCargo = 1 AND name LIKE :searchQuery")
+    fun searchToDatabase(searchQuery:String): LiveData<List<Terminal>>
+
+
 }

@@ -22,11 +22,6 @@ class MainActivity : AppCompatActivity() {
         navInit()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.menu, menu)
-        return true
-    }
 
     private fun navInit() {
         val host = supportFragmentManager.findFragmentById(R.id.navHost) as NavHostFragment

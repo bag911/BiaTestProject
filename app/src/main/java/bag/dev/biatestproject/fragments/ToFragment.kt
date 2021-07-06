@@ -1,10 +1,9 @@
 package bag.dev.biatestproject.fragments
 
 import android.os.Bundle
+import android.view.*
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -16,13 +15,19 @@ import bag.dev.biatestproject.R
 import bag.dev.biatestproject.database.Terminal
 import bag.dev.biatestproject.database.TerminalViewModel
 import bag.dev.biatestproject.databinding.FragmentToBinding
+import bag.dev.biatestproject.hideKeyboard
 
-class ToFragment : Fragment() {
+class ToFragment : Fragment(), SearchView.OnQueryTextListener {
     private var _toBinding:FragmentToBinding ? = null
     private val toBinding get() = _toBinding!!
     private val adapter = ToListAdapter(emptyArray())
     private val navViewModel: NavViewModel by activityViewModels()
     private lateinit var terminalViewModel: TerminalViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,8 +40,8 @@ class ToFragment : Fragment() {
         toBinding.toRcView.layoutManager = LinearLayoutManager(requireContext())
 
         //TerminalViewModel //Todo uncomment this
-//        terminalViewModel = ViewModelProvider(this).get(TerminalViewModel::class.java)
-//        terminalViewModel.readAllData.observe(viewLifecycleOwner, Observer {terminal ->
+        terminalViewModel = ViewModelProvider(this).get(TerminalViewModel::class.java)
+//        terminalViewModel.readAllToData.observe(viewLifecycleOwner, Observer {terminal ->
 //            adapter.setData(terminal)
 //        })
 
@@ -77,5 +82,40 @@ class ToFragment : Fragment() {
             notifyDataSetChanged()
         }
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu,menu)
+        val search = menu.findItem(R.id.search)
+        val searchView = search?.actionView as? SearchView
+        searchView?.isSubmitButtonEnabled = true
+        searchView?.setOnQueryTextListener(this)
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if (query != null){
+            searchString(query)
+            hideKeyboard()
+        }
+        return true
+    }
+
+    override fun onQueryTextChange(query: String?): Boolean {
+        if (query != null){
+            searchString(query)
+
+        }
+
+        return true
+    }
+
+    private fun searchString(query:String){
+        val searchQuery = "%$query%"
+
+        terminalViewModel.searchToDatabase(searchQuery).observe(viewLifecycleOwner,{list->
+            list.let {
+                adapter.setData(it)
+            }
+        })
     }
 }
