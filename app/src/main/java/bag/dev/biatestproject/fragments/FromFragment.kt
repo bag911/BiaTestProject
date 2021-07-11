@@ -2,9 +2,9 @@ package bag.dev.biatestproject.fragments
 
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.widget.SearchView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -24,7 +24,7 @@ class FromFragment : Fragment(), SearchView.OnQueryTextListener {
     private val fromBinding get() = _fromBinding!!
     private val navViewModel: NavViewModel by activityViewModels()
     private lateinit var terminalViewModel:TerminalViewModel
-    private val adapter = FromListAdapter(emptyArray())
+    private val adapter = FromListAdapter()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,33 +42,27 @@ class FromFragment : Fragment(), SearchView.OnQueryTextListener {
         fromBinding.fromRcView.adapter = adapter
         fromBinding.fromRcView.layoutManager = LinearLayoutManager(requireContext())
 
-        //TerminalViewModel //Todo uncomment this
+        //TerminalViewModel
         terminalViewModel = ViewModelProvider(this).get(TerminalViewModel::class.java)
-//        terminalViewModel.readAllFromData.observe(viewLifecycleOwner, Observer {terminal ->
-//            adapter.setData(terminal)
-//        })
+        terminalViewModel.readAllFromData.observe(viewLifecycleOwner, {terminal ->
+            adapter.setData(terminal)
+        })
 
         return fromBinding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        fromBinding.fromRcView.layoutManager = LinearLayoutManager(activity?.applicationContext)
-        fromBinding.fromRcView.adapter = FromListAdapter(arrayOf("Sun","Moon","Chan"))
-    }
-
-    inner class FromListAdapter(private val dataSet: Array<String>) : RecyclerView.Adapter<FromListAdapter.ViewHolder>() {
+    inner class FromListAdapter : RecyclerView.Adapter<FromListAdapter.ViewHolder>() {
 
         private var terminalList = emptyList<Terminal>()
 
         inner class ViewHolder (view:View): RecyclerView.ViewHolder(view){
             private val textView: TextView = view.findViewById(R.id.fromTextView)
-            fun inflateViews(item:String) {
-                textView.text = item
+            fun inflateViews(item:Terminal) {
+                textView.text = item.name
 
-                itemView.setOnClickListener {
-//                    navViewModel.fromId = item.id
-                    findNavController().navigate(R.id.action_viewPagerFragment_to_statFragment)
+                itemView.setOnClickListener{
+                    navViewModel.fromId = item.id
+                    findNavController().navigateUp()
                 }
             }
         }
@@ -79,21 +73,22 @@ class FromFragment : Fragment(), SearchView.OnQueryTextListener {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val item = dataSet[position]
-            holder.inflateViews(item)
+            val currentItem = terminalList[position]
+            holder.inflateViews(currentItem)
         }
 
-        override fun getItemCount() = dataSet.size
+        override fun getItemCount() = terminalList.size
 
-        fun setData(terminal:List<Terminal>){
+        fun setData(terminal: List<Terminal>){
             this.terminalList = terminal
             notifyDataSetChanged()
         }
+
     }
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu,menu)
+        super.onCreateOptionsMenu(menu, inflater)
         val search = menu.findItem(R.id.search)
         val searchView = search?.actionView as? SearchView
         searchView?.isSubmitButtonEnabled = true
@@ -112,7 +107,6 @@ class FromFragment : Fragment(), SearchView.OnQueryTextListener {
     override fun onQueryTextChange(query: String?): Boolean {
         if (query != null){
             searchString(query)
-
         }
 
         return true
@@ -126,5 +120,25 @@ class FromFragment : Fragment(), SearchView.OnQueryTextListener {
                 adapter.setData(it)
             }
         })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.sortByName -> {
+                terminalViewModel.sortFromDataByName.observe(viewLifecycleOwner, {terminal->
+                    adapter.setData(terminal)
+                })
+                true
+            }
+            R.id.sortByDistance -> {
+                terminalViewModel.sortFromDataByDistance.observe(viewLifecycleOwner, {terminal->
+                    adapter.setData(terminal)
+                })
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+
+
     }
 }

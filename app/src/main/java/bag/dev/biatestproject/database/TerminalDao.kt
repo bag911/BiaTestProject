@@ -16,14 +16,20 @@ interface TerminalDao {
     @Query("SELECT * FROM terminal_table ORDER BY id ASC")
     fun readAllData(): LiveData<List<Terminal>>
 
-    @Query("SELECT * FROM terminal_table ORDER BY name ASC")
-    fun sortDataByName(): LiveData<List<Terminal>>
+    @Query("SELECT * FROM terminal_table WHERE receiveCargo = 1 ORDER BY name ASC")
+    fun sortFromDataByName(): LiveData<List<Terminal>>
 
+    @Query("SELECT * FROM terminal_table WHERE defaultState = 1 AND giveoutCargo = 1 ORDER BY name ASC")
+    fun sortToDataByName(): LiveData<List<Terminal>>
 
-    //TODO: Сделать sortByDistance
+    @Query("SELECT * FROM terminal_table WHERE id = :terminalId")
+    fun getTerminalById(terminalId:Int):LiveData<Terminal>
 
-//    @Query("SELECT * FROM terminal_table ORDER BY age ASC")
-//    fun sortDataByAge(): LiveData<List<Terminal>>
+    @Query("SELECT * FROM terminal_table WHERE receiveCargo = 1 ORDER BY distanceValue ASC")
+    fun sortFromDataByDistance(): LiveData<List<Terminal>>
+
+    @Query("SELECT * FROM terminal_table WHERE defaultState = 1 AND giveoutCargo = 1 ORDER BY distanceValue ASC")
+    fun sortToDataByDistance(): LiveData<List<Terminal>>
 
 
     @Query("SELECT * FROM  terminal_table WHERE receiveCargo = 1")
@@ -38,5 +44,6 @@ interface TerminalDao {
     @Query("SELECT * FROM terminal_table WHERE defaultState = 1 AND giveoutCargo = 1 AND name LIKE :searchQuery")
     fun searchToDatabase(searchQuery:String): LiveData<List<Terminal>>
 
-
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(vararg terminal: Terminal)
 }

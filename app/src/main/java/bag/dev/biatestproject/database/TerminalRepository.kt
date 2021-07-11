@@ -5,8 +5,10 @@ import androidx.lifecycle.LiveData
 
 class TerminalRepository(private val terminalDao: TerminalDao) {
     val readAllData: LiveData<List<Terminal>> = terminalDao.readAllData()
-    val sortedDataByName: LiveData<List<Terminal>> = terminalDao.sortDataByName()
-
+    val sortedFromDataByName: LiveData<List<Terminal>> = terminalDao.sortFromDataByName()
+    val sortedToDataByName: LiveData<List<Terminal>> = terminalDao.sortToDataByName()
+    val sortFromDataByDistance: LiveData<List<Terminal>> = terminalDao.sortFromDataByDistance()
+    val sortToDataByDistance: LiveData<List<Terminal>> = terminalDao.sortToDataByDistance()
     val readAllFromData: LiveData<List<Terminal>> = terminalDao.readAllFromData()
     val readAllToData: LiveData<List<Terminal>> = terminalDao.readAllToData()
 
@@ -15,6 +17,10 @@ class TerminalRepository(private val terminalDao: TerminalDao) {
 //    suspend fun addTransaction(user:Terminal){
 //        terminalDao.addTerminal(user)
 //    }
+
+    fun getTerminalById(terminalId:Int):LiveData<Terminal>{
+       return terminalDao.getTerminalById(terminalId)
+    }
 
     fun searchFromDatabase(searchQuery:String):LiveData<List<Terminal>>{
         return terminalDao.searchFromDatabase(searchQuery)
@@ -25,5 +31,9 @@ class TerminalRepository(private val terminalDao: TerminalDao) {
 
     suspend fun saveTransaction(transactions: Transactions){
         terminalDao.saveTransaction(transactions)
+    }
+
+    suspend fun insert(vararg terminal: Terminal){
+        terminalDao.insert(*terminal)
     }
 }

@@ -1,19 +1,20 @@
 package bag.dev.biatestproject.fragments
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import bag.dev.biatestproject.R
 import bag.dev.biatestproject.databinding.FragmentViewPagerBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
 
 class ViewPagerFragment : Fragment() {
+
+
 
     private var _viewPagerBinding:FragmentViewPagerBinding? = null
     private val viewPagerBinding get() = _viewPagerBinding!!
@@ -43,6 +44,7 @@ class ViewPagerFragment : Fragment() {
         viewPager.currentItem = arguments?.getInt("pointer")!!
 
 
+
         return viewPagerBinding.root
     }
 
@@ -56,6 +58,8 @@ class ViewPagerFragment : Fragment() {
             }
         }
     }
+
+
 }
 
 
