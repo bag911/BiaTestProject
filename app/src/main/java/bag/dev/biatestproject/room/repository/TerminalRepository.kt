@@ -1,10 +1,12 @@
-package bag.dev.biatestproject.database
+package bag.dev.biatestproject.room.repository
 
 import androidx.lifecycle.LiveData
+import bag.dev.biatestproject.room.model.Terminal
+import bag.dev.biatestproject.room.database.TerminalDao
+import bag.dev.biatestproject.room.model.Transactions
 
 
 class TerminalRepository(private val terminalDao: TerminalDao) {
-    val readAllData: LiveData<List<Terminal>> = terminalDao.readAllData()
     val sortedFromDataByName: LiveData<List<Terminal>> = terminalDao.sortFromDataByName()
     val sortedToDataByName: LiveData<List<Terminal>> = terminalDao.sortToDataByName()
     val sortFromDataByDistance: LiveData<List<Terminal>> = terminalDao.sortFromDataByDistance()
@@ -12,11 +14,6 @@ class TerminalRepository(private val terminalDao: TerminalDao) {
     val readAllFromData: LiveData<List<Terminal>> = terminalDao.readAllFromData()
     val readAllToData: LiveData<List<Terminal>> = terminalDao.readAllToData()
 
-//    val sortedDataByAge: LiveData<List<Terminal>> = terminalDao.sortDataByAge()
-
-//    suspend fun addTransaction(user:Terminal){
-//        terminalDao.addTerminal(user)
-//    }
 
     fun getTerminalById(terminalId:Int):LiveData<Terminal>{
        return terminalDao.getTerminalById(terminalId)
@@ -35,5 +32,9 @@ class TerminalRepository(private val terminalDao: TerminalDao) {
 
     suspend fun insert(vararg terminal: Terminal){
         terminalDao.insert(*terminal)
+    }
+
+    suspend fun delete(){
+        terminalDao.delete()
     }
 }

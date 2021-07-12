@@ -1,4 +1,4 @@
-package bag.dev.biatestproject
+package bag.dev.biatestproject.viewmodel
 
 import androidx.lifecycle.ViewModel
 

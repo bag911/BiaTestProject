@@ -1,20 +1,20 @@
 package bag.dev.biatestproject.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import bag.dev.biatestproject.NavViewModel
+import bag.dev.biatestproject.viewmodel.NavViewModel
 import bag.dev.biatestproject.R
-import bag.dev.biatestproject.database.Terminal
-import bag.dev.biatestproject.database.TerminalViewModel
+import bag.dev.biatestproject.room.model.Terminal
+import bag.dev.biatestproject.viewmodel.TerminalViewModel
 import bag.dev.biatestproject.databinding.FragmentFromBinding
 import bag.dev.biatestproject.hideKeyboard
 
@@ -22,8 +22,9 @@ class FromFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private var _fromBinding:FragmentFromBinding ? = null
     private val fromBinding get() = _fromBinding!!
+
     private val navViewModel: NavViewModel by activityViewModels()
-    private lateinit var terminalViewModel:TerminalViewModel
+    private lateinit var terminalViewModel: TerminalViewModel
     private val adapter = FromListAdapter()
 
 
@@ -45,19 +46,21 @@ class FromFragment : Fragment(), SearchView.OnQueryTextListener {
         //TerminalViewModel
         terminalViewModel = ViewModelProvider(this).get(TerminalViewModel::class.java)
         terminalViewModel.readAllFromData.observe(viewLifecycleOwner, {terminal ->
-            adapter.setData(terminal)
+            adapter.setData(terminal)                                                               //Fill list by "from" data
         })
 
         return fromBinding.root
     }
 
+    //FromFragment Recycler View adapter
     inner class FromListAdapter : RecyclerView.Adapter<FromListAdapter.ViewHolder>() {
 
         private var terminalList = emptyList<Terminal>()
 
+        //Adapter ViewHolder
         inner class ViewHolder (view:View): RecyclerView.ViewHolder(view){
             private val textView: TextView = view.findViewById(R.id.fromTextView)
-            fun inflateViews(item:Terminal) {
+            fun inflateViews(item: Terminal) {
                 textView.text = item.name
 
                 itemView.setOnClickListener{
@@ -79,7 +82,7 @@ class FromFragment : Fragment(), SearchView.OnQueryTextListener {
 
         override fun getItemCount() = terminalList.size
 
-        fun setData(terminal: List<Terminal>){
+        fun setData(terminal: List<Terminal>){                                                      //Filling List of terminals
             this.terminalList = terminal
             notifyDataSetChanged()
         }
@@ -92,6 +95,19 @@ class FromFragment : Fragment(), SearchView.OnQueryTextListener {
         val search = menu.findItem(R.id.search)
         val searchView = search?.actionView as? SearchView
         searchView?.isSubmitButtonEnabled = true
+
+        menu.findItem(R.id.sortByName).setOnMenuItemClickListener{
+            terminalViewModel.sortFromDataByName.observe(viewLifecycleOwner, {terminal->
+                adapter.setData(terminal)                                                       //Filling list of Terminals with sorted data alphabetically
+            })
+            true
+        }
+        menu.findItem(R.id.sortByDistance).setOnMenuItemClickListener {
+            terminalViewModel.sortFromDataByDistance.observe(viewLifecycleOwner, {terminal->
+                adapter.setData(terminal)                                                       //Filling list of Terminals with sorted data by distance
+            })
+            true
+        }
 
         searchView?.setOnQueryTextListener(this)
     }
@@ -108,37 +124,47 @@ class FromFragment : Fragment(), SearchView.OnQueryTextListener {
         if (query != null){
             searchString(query)
         }
-
         return true
     }
 
+    //Search string method
     private fun searchString(query:String){
         val searchQuery = "%$query%"
 
         terminalViewModel.searchFromDatabase(searchQuery).observe(viewLifecycleOwner,{list->
             list.let {
-                adapter.setData(it)
+                adapter.setData(it)                                                                 //Filling list of Terminals that match the string
             }
         })
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId){
-            R.id.sortByName -> {
-                terminalViewModel.sortFromDataByName.observe(viewLifecycleOwner, {terminal->
-                    adapter.setData(terminal)
-                })
-                true
-            }
-            R.id.sortByDistance -> {
-                terminalViewModel.sortFromDataByDistance.observe(viewLifecycleOwner, {terminal->
-                    adapter.setData(terminal)
-                })
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
+    //Options Menu Listener
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return when(item.itemId){
+//            R.id.sortByName -> {
+//                terminalViewModel.sortFromDataByName.observe(viewLifecycleOwner, {terminal->
+//                    adapter.setData(terminal)                                                       //Filling list of Terminals with sorted data alphabetically
+//                })
+//                true
+//            }
+//            R.id.sortByDistance -> {
+//                terminalViewModel.sortFromDataByDistance.observe(viewLifecycleOwner, {terminal->
+//                    adapter.setData(terminal)                                                       //Filling list of Terminals with sorted data by distance
+//                })
+//                true
+//            }
+//            else -> super.onOptionsItemSelected(item)
+//        }
+//
+//
+//    }
 
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d("DOTA", "Destroy")
+        _fromBinding = null
+        onDestroyOptionsMenu()
     }
+
+
 }

@@ -1,15 +1,18 @@
-package bag.dev.biatestproject.database
+package bag.dev.biatestproject.viewmodel
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import bag.dev.biatestproject.BASE_URL
-import bag.dev.biatestproject.retrofit.TerminalApi
+import bag.dev.biatestproject.room.model.Terminal
+import bag.dev.biatestproject.room.database.TerminalDatabase
+import bag.dev.biatestproject.room.repository.TerminalRepository
+import bag.dev.biatestproject.room.model.Transactions
+import bag.dev.biatestproject.retrofit.api.TerminalApi
 import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.SphericalUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -19,11 +22,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class TerminalViewModel(application: Application) : AndroidViewModel(application) {
 
-    //    val readAllData: LiveData<List<Terminal>>
     val sortFromDataByName: LiveData<List<Terminal>>
     val sortToDataByName: LiveData<List<Terminal>>
-
-    //    val sortedDataByAge: LiveData<List<Terminal>>
     val readAllFromData: LiveData<List<Terminal>>
     val readAllToData: LiveData<List<Terminal>>
     val sortFromDataByDistance: LiveData<List<Terminal>>
@@ -31,7 +31,7 @@ class TerminalViewModel(application: Application) : AndroidViewModel(application
     private val repository: TerminalRepository
 
     val api = Retrofit.Builder()
-        .baseUrl(BASE_URL)
+        .baseUrl("https://api.dellin.ru")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(TerminalApi::class.java)
@@ -66,25 +66,32 @@ class TerminalViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    private fun insert(dataList: ArrayList<Terminal>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insert(*dataList.toTypedArray())
+        }
+    }
+    private fun delete() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.delete()
+        }
+    }
 
+
+    //Parsing from json
     fun getData(context: Context, myPos: LatLng) {
-
         viewModelScope.launch(Dispatchers.IO) {
             getInfo(context, myPos)
         }
-
-//        go(context)
-
     }
 
-    suspend fun getInfo(context: Context, myPos: LatLng) {
+    private suspend fun getInfo(context: Context, myPos: LatLng) {
         try {
             var strWorktables = ""
             val dataList = arrayListOf<Terminal>()
             val response = api.getRoute().awaitResponse()
             if (response.isSuccessful) {
                 val data = response.body()!!
-                Log.d("DOTA", data.city?.size.toString())
                 for (i in data.city!!) {
                     for (j in i?.terminals?.terminal!!) {
                         if (j != null) {
@@ -104,7 +111,7 @@ class TerminalViewModel(application: Application) : AndroidViewModel(application
                                     j.maps?.width?.jsonMember640?.height?.jsonMember640?.url.toString(),
                                     strWorktables,
                                     j.address.toString(),
-                                    0.0
+                                    SphericalUtil.computeDistanceBetween(myPos, LatLng(j.latitude.toDouble(),j.longitude.toDouble()))
                                 )
                             )
                             strWorktables = ""
@@ -119,12 +126,4 @@ class TerminalViewModel(application: Application) : AndroidViewModel(application
             }
         }
     }
-
-    private fun insert(dataList: ArrayList<Terminal>) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.insert(*dataList.toTypedArray())
-        }
-    }
-
-
 }

@@ -1,4 +1,4 @@
-package bag.dev.biatestproject.retrofit
+package bag.dev.biatestproject.retrofit.model
 
 import com.google.gson.annotations.SerializedName
 

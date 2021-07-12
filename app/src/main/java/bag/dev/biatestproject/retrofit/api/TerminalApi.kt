@@ -1,5 +1,6 @@
-package bag.dev.biatestproject.retrofit
+package bag.dev.biatestproject.retrofit.api
 
+import bag.dev.biatestproject.retrofit.model.Response
 import retrofit2.Call
 import retrofit2.http.GET
 

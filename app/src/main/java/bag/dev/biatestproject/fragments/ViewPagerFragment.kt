@@ -14,12 +14,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class ViewPagerFragment : Fragment() {
 
-
-
     private var _viewPagerBinding:FragmentViewPagerBinding? = null
     private val viewPagerBinding get() = _viewPagerBinding!!
-
-//    private val navViewModel:NavViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,14 +23,15 @@ class ViewPagerFragment : Fragment() {
     ): View {
         _viewPagerBinding = FragmentViewPagerBinding.inflate(inflater,container,false)
 
-
+        //ViewPager
         val tabLayout = viewPagerBinding.tabLayout
         val viewPager = viewPagerBinding.pager
 
         viewPager.adapter = ViewPagerAdapter(requireActivity())
         viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
 
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->                                  //Connect TabLayout to ViewPager
             when(position){
                 0 -> tab.text = "Откуда"
                 else -> tab.text = "Куда"
@@ -43,11 +40,11 @@ class ViewPagerFragment : Fragment() {
 
         viewPager.currentItem = arguments?.getInt("pointer")!!
 
-
-
         return viewPagerBinding.root
     }
 
+
+    //Adapter
     class ViewPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
         override fun getItemCount(): Int = 2
 
@@ -58,6 +55,13 @@ class ViewPagerFragment : Fragment() {
             }
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _viewPagerBinding = null
+
+    }
+
 
 
 }

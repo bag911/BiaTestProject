@@ -8,10 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import bag.dev.biatestproject.NavViewModel
+import bag.dev.biatestproject.viewmodel.NavViewModel
 import bag.dev.biatestproject.R
-import bag.dev.biatestproject.database.TerminalViewModel
-import bag.dev.biatestproject.database.Transactions
+import bag.dev.biatestproject.viewmodel.TerminalViewModel
+import bag.dev.biatestproject.room.model.Transactions
 import bag.dev.biatestproject.databinding.FragmentStatBinding
 import com.bumptech.glide.Glide
 
@@ -36,25 +36,26 @@ class StatFragment : Fragment() {
         _statBinding = FragmentStatBinding.inflate(inflater, container, false)
 
         terminalViewModel = ViewModelProvider(this).get(TerminalViewModel::class.java)
-        Log.d("DOTA", "${navViewModel.fromId}   ${navViewModel.toId}")
 
+        //Checking selected From terminals
         if (navViewModel.fromId > 0) {
             terminalViewModel.getTerminalById(navViewModel.fromId)
                 .observe(viewLifecycleOwner, { terminal ->
-                    statBinding.nameFrom.text = terminal.name
-                    statBinding.addressFrom.text = terminal.address
-                    statBinding.distanceFrom.text = terminal.distanceValue.toString()
+                    "Название: ${terminal.name}".also { statBinding.nameFrom.text = it }
+                    "Адрес: ${terminal.address}".also { statBinding.addressFrom.text = it }
+                    "Расстояние: ${terminal.distanceValue}m".also { statBinding.distanceFrom.text = it }
                     statBinding.workTableFrom.text = terminal.worktables
                     Glide.with(this).load(terminal.mapUrl).circleCrop()
                         .placeholder(R.drawable.sample).circleCrop().into(statBinding.imageViewFrom)
                 })
         }
+        //Checking selected To terminals
         if (navViewModel.toId > 0) {
             terminalViewModel.getTerminalById(navViewModel.toId)
                 .observe(viewLifecycleOwner, { terminal ->
-                    statBinding.nameTo.text = terminal.name
-                    statBinding.addressTo.text = terminal.address
-                    statBinding.distanceTo.text = terminal.distanceValue.toString()
+                    "Название: ${terminal.name}".also { statBinding.nameTo.text = it }
+                    "Адрес: ${terminal.address}".also { statBinding.addressTo.text = it }
+                    "Расстояние: ${terminal.distanceValue}m".also { statBinding.distanceTo.text = it }
                     statBinding.workTableTo.text = terminal.worktables
                     Glide.with(this).load(terminal.mapUrl).circleCrop()
                         .placeholder(R.drawable.sample).into(statBinding.imageViewTo)
@@ -67,8 +68,7 @@ class StatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //TODO Выгрузка данных при открытии фрагмента по id
-
+        //Checking that both of terminals are not empty
         statBinding.saveBtn.isEnabled = navViewModel.fromId > 0 && navViewModel.toId > 0
 
         statBinding.from.setOnClickListener {
@@ -80,6 +80,8 @@ class StatFragment : Fragment() {
             val bundle = bundleOf("pointer" to 1)
             findNavController().navigate(R.id.action_statFragment_to_viewPagerFragment, bundle)
         }
+
+        //Saving transaction's data
         statBinding.saveBtn.setOnClickListener {
             terminalViewModel.saveTransaction(
                 Transactions(
@@ -94,11 +96,13 @@ class StatFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        menu.findItem(R.id.sortByName).isVisible = false
-        menu.findItem(R.id.sortByDistance).isVisible = false
-        menu.findItem(R.id.search).isVisible = false
-
+//        menu.findItem(R.id.sortByName).
     }
 
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _statBinding = null
+    }
 
 }

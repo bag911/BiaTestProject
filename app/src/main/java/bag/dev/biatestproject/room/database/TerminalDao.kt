@@ -1,10 +1,12 @@
-package bag.dev.biatestproject.database
+package bag.dev.biatestproject.room.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import bag.dev.biatestproject.room.model.Terminal
+import bag.dev.biatestproject.room.model.Transactions
 
 
 @Dao
@@ -46,4 +48,7 @@ interface TerminalDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(vararg terminal: Terminal)
+
+    @Query("DELETE FROM terminal_table")
+    suspend fun delete()
 }
