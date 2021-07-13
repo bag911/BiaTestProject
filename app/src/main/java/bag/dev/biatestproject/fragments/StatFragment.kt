@@ -1,7 +1,7 @@
 package bag.dev.biatestproject.fragments
 
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -14,6 +14,8 @@ import bag.dev.biatestproject.viewmodel.TerminalViewModel
 import bag.dev.biatestproject.room.model.Transactions
 import bag.dev.biatestproject.databinding.FragmentStatBinding
 import com.bumptech.glide.Glide
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 
 class StatFragment : Fragment() {
@@ -21,8 +23,16 @@ class StatFragment : Fragment() {
     private var _statBinding: FragmentStatBinding? = null
     private val statBinding get() = _statBinding!!
 
+
     private val navViewModel: NavViewModel by activityViewModels()
     private lateinit var terminalViewModel: TerminalViewModel
+
+    private var appBarLogic:AppBarLogic ?=null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        appBarLogic = context as AppBarLogic
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,29 +48,30 @@ class StatFragment : Fragment() {
         terminalViewModel = ViewModelProvider(this).get(TerminalViewModel::class.java)
 
         //Checking selected From terminals
-        if (navViewModel.fromId > 0) {
+        if (navViewModel.checkFromItemSelected()) {
             terminalViewModel.getTerminalById(navViewModel.fromId)
                 .observe(viewLifecycleOwner, { terminal ->
                     "Название: ${terminal.name}".also { statBinding.nameFrom.text = it }
                     "Адрес: ${terminal.address}".also { statBinding.addressFrom.text = it }
-                    "Расстояние: ${terminal.distanceValue}m".also { statBinding.distanceFrom.text = it }
+                    "Расстояние: ${BigDecimal(terminal.distanceValue/1000.0).setScale(2,RoundingMode.HALF_EVEN)}km".also { statBinding.distanceFrom.text = it }
                     statBinding.workTableFrom.text = terminal.worktables
                     Glide.with(this).load(terminal.mapUrl).circleCrop()
                         .placeholder(R.drawable.sample).circleCrop().into(statBinding.imageViewFrom)
                 })
         }
         //Checking selected To terminals
-        if (navViewModel.toId > 0) {
+        if (navViewModel.checkToItemSelected()) {
             terminalViewModel.getTerminalById(navViewModel.toId)
                 .observe(viewLifecycleOwner, { terminal ->
                     "Название: ${terminal.name}".also { statBinding.nameTo.text = it }
                     "Адрес: ${terminal.address}".also { statBinding.addressTo.text = it }
-                    "Расстояние: ${terminal.distanceValue}m".also { statBinding.distanceTo.text = it }
+                    "Расстояние: ${BigDecimal(terminal.distanceValue/1000.0).setScale(2,RoundingMode.HALF_EVEN)}km".also { statBinding.distanceTo.text = it }
                     statBinding.workTableTo.text = terminal.worktables
                     Glide.with(this).load(terminal.mapUrl).circleCrop()
                         .placeholder(R.drawable.sample).into(statBinding.imageViewTo)
                 })
         }
+        appBarLogic?.hide()
 
         return statBinding.root
     }
@@ -94,15 +105,8 @@ class StatFragment : Fragment() {
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-//        menu.findItem(R.id.sortByName).
-    }
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         _statBinding = null
     }
-
 }

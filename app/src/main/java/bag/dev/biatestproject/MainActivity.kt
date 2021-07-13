@@ -5,7 +5,8 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -15,12 +16,13 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import bag.dev.biatestproject.viewmodel.TerminalViewModel
 import bag.dev.biatestproject.databinding.ActivityMainBinding
+import bag.dev.biatestproject.fragments.AppBarLogic
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), AppBarLogic{
 
     private lateinit var mainBinding: ActivityMainBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -31,8 +33,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(mainBinding.root)
 
         navInit()
-        locationInit()
-
+        checkUserLocation()
+        mainBinding.toolbar.visibility = View.GONE
     }
 
     //Checking access of permission
@@ -56,16 +58,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     //Check user location
-    private fun locationInit() {
+    private fun checkUserLocation() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         val viewModel = ViewModelProvider(this).get(TerminalViewModel::class.java)
         checkPermission()
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location ->
-            viewModel.getData(this, LatLng(location.latitude, location.longitude))
+            viewModel.getData(LatLng(location.latitude, location.longitude))
+        }
+        fusedLocationClient.lastLocation.addOnFailureListener {
+            Toast.makeText(this, "Error on check location", Toast.LENGTH_SHORT).show()
         }
     }
-
 
     //Connect navigation
     private fun navInit() {
@@ -78,9 +82,15 @@ class MainActivity : AppCompatActivity() {
 
     //Connect options menu
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu, menu)
+        menuInflater.inflate(R.menu.menu,menu)
         return false
     }
 
+    override fun hide() {
+        mainBinding.toolbar.visibility = View.GONE
+    }
 
+    override fun show() {
+        mainBinding.toolbar.visibility = View.VISIBLE
+    }
 }

@@ -1,21 +1,18 @@
 package bag.dev.biatestproject.viewmodel
 
 import android.app.Application
-import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import bag.dev.biatestproject.room.model.Terminal
-import bag.dev.biatestproject.room.database.TerminalDatabase
-import bag.dev.biatestproject.room.repository.TerminalRepository
-import bag.dev.biatestproject.room.model.Transactions
 import bag.dev.biatestproject.retrofit.api.TerminalApi
+import bag.dev.biatestproject.room.database.TerminalDatabase
+import bag.dev.biatestproject.room.model.Terminal
+import bag.dev.biatestproject.room.model.Transactions
+import bag.dev.biatestproject.room.repository.TerminalRepository
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
 import retrofit2.converter.gson.GsonConverterFactory
@@ -30,7 +27,7 @@ class TerminalViewModel(application: Application) : AndroidViewModel(application
     val sortToDataByDistance: LiveData<List<Terminal>>
     private val repository: TerminalRepository
 
-    val api = Retrofit.Builder()
+    private val api = Retrofit.Builder()
         .baseUrl("https://api.dellin.ru")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
@@ -71,21 +68,21 @@ class TerminalViewModel(application: Application) : AndroidViewModel(application
             repository.insert(*dataList.toTypedArray())
         }
     }
-    private fun delete() {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.delete()
-        }
-    }
+//    private fun delete() {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            repository.delete()
+//        }
+//    }
 
 
     //Parsing from json
-    fun getData(context: Context, myPos: LatLng) {
+    fun getData(myPos: LatLng) {
         viewModelScope.launch(Dispatchers.IO) {
-            getInfo(context, myPos)
+            getInfo(myPos)
         }
     }
 
-    private suspend fun getInfo(context: Context, myPos: LatLng) {
+    private suspend fun getInfo(myPos: LatLng) {
         try {
             var strWorktables = ""
             val dataList = arrayListOf<Terminal>()
@@ -95,7 +92,6 @@ class TerminalViewModel(application: Application) : AndroidViewModel(application
                 for (i in data.city!!) {
                     for (j in i?.terminals?.terminal!!) {
                         if (j != null) {
-
                             for (w in j.worktables?.worktable!!) {
                                 strWorktables += "${w?.department}|${w?.monday}|${w?.tuesday}|${w?.wednesday}|${w?.thursday}|${w?.friday}|${w?.saturday}|${w?.sunday}|${w?.timetable}\n"
                             }
@@ -121,9 +117,7 @@ class TerminalViewModel(application: Application) : AndroidViewModel(application
                 insert(dataList)
             }
         } catch (e: Exception) {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(context, "Something went wrong...", Toast.LENGTH_SHORT).show()
-            }
+            //Todo check exception
         }
     }
 }

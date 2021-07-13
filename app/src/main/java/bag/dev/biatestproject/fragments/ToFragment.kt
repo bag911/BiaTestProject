@@ -48,7 +48,6 @@ class ToFragment : Fragment(), SearchView.OnQueryTextListener {
         return toBinding.root
     }
 
-
     //ToFragment Recycler View adapter
     inner class ToListAdapter : RecyclerView.Adapter<ToListAdapter.ViewHolder>() {
 

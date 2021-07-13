@@ -18,11 +18,6 @@ data class JsonMember640(
 	val url: String? = null
 )
 
-data class AddressCode(
-
-	@field:SerializedName("street_code")
-	val streetCode: String? = null
-)
 
 data class Height(
 
@@ -147,20 +142,6 @@ data class JsonMember960(
 	val url: String? = null
 )
 
-data class PhonesItem(
-
-	@field:SerializedName("number")
-	val number: String? = null,
-
-	@field:SerializedName("comment")
-	val comment: String? = null,
-
-	@field:SerializedName("type")
-	val type: String? = null,
-
-	@field:SerializedName("primary")
-	val primary: Boolean? = null
-)
 
 data class Maps(
 

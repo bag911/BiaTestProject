@@ -1,5 +1,6 @@
 package bag.dev.biatestproject.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -27,6 +28,13 @@ class FromFragment : Fragment(), SearchView.OnQueryTextListener {
     private lateinit var terminalViewModel: TerminalViewModel
     private val adapter = FromListAdapter()
 
+    private var appBarLogic:AppBarLogic ? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        appBarLogic = context as AppBarLogic
+        appBarLogic?.show()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,6 +103,7 @@ class FromFragment : Fragment(), SearchView.OnQueryTextListener {
         val search = menu.findItem(R.id.search)
         val searchView = search?.actionView as? SearchView
         searchView?.isSubmitButtonEnabled = true
+
 
         menu.findItem(R.id.sortByName).setOnMenuItemClickListener{
             terminalViewModel.sortFromDataByName.observe(viewLifecycleOwner, {terminal->

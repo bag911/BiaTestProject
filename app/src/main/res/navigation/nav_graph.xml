@@ -8,12 +8,12 @@
     <fragment
         android:id="@+id/statFragment"
         android:name="bag.dev.biatestproject.fragments.StatFragment"
-        android:label="fragment_stat"
-        tools:layout="@layout/fragment_stat" >
+        android:label="Информациия о транзакции"
+        tools:layout="@layout/fragment_stat">
         <argument
             android:name="pointer"
-            app:argType="integer"
-            android:defaultValue="0" />
+            android:defaultValue="0"
+            app:argType="integer" />
         <action
             android:id="@+id/action_statFragment_to_viewPagerFragment"
             app:destination="@id/viewPagerFragment" />
@@ -21,8 +21,8 @@
     <fragment
         android:id="@+id/viewPagerFragment"
         android:name="bag.dev.biatestproject.fragments.ViewPagerFragment"
-        android:label="fragment_view_pager"
-        tools:layout="@layout/fragment_view_pager" >
+        android:label="Терминалы"
+        tools:layout="@layout/fragment_view_pager">
         <action
             android:id="@+id/action_viewPagerFragment_to_statFragment"
             app:destination="@id/statFragment" />
