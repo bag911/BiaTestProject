@@ -1,11 +1,10 @@
 package bag.dev.biatestproject.fragments
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import bag.dev.biatestproject.R
@@ -46,14 +45,14 @@ class ReviewStatFragment(private val position:Int) : Fragment() {
     private fun inflateTerminalFrom() {
         //Checking selected From terminals
         if (navViewModel.checkFromItemSelected()) {
-            terminalViewModel.getTerminalById(1)
+            terminalViewModel.getTerminalById(navViewModel.fromId)
                 .observe(viewLifecycleOwner, { terminal ->
                     terminal.name.also { reviewStatBinding.nameFrom.text = it }
                     terminal.address.also { reviewStatBinding.addressFrom.text = it }
                     "${BigDecimal(terminal.distanceValue/1000.0).setScale(2, RoundingMode.HALF_EVEN)} км".also { reviewStatBinding.distanceFrom.text = it }
                     reviewStatBinding.workTableFrom.text = terminal.worktables
                     Glide.with(this).load(terminal.mapUrl)
-                        .placeholder(R.drawable.sample).into(reviewStatBinding.imageViewFrom)
+                        .placeholder(R.drawable.placeholder_img).into(reviewStatBinding.imageViewFrom)
                 })
         }
 
@@ -69,7 +68,7 @@ class ReviewStatFragment(private val position:Int) : Fragment() {
                     "${BigDecimal(terminal.distanceValue/1000.0).setScale(2, RoundingMode.HALF_EVEN)} км".also { reviewStatBinding.distanceFrom.text = it }
                     reviewStatBinding.workTableFrom.text = terminal.worktables
                     Glide.with(this).load(terminal.mapUrl)
-                        .placeholder(R.drawable.sample).into(reviewStatBinding.imageViewFrom)
+                        .placeholder(R.drawable.placeholder_img).into(reviewStatBinding.imageViewFrom)
                 })
         }
     }

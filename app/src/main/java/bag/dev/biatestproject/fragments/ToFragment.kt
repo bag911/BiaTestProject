@@ -67,7 +67,7 @@ class ToFragment : Fragment(), SearchView.OnQueryTextListener {
                 textName.text = item.name
                 "${BigDecimal(item.distanceValue/1000.0).setScale(2, RoundingMode.HALF_EVEN)} км".also { textDistance.text = it }
                 Glide.with(requireContext()).load(item.mapUrl).circleCrop()
-                    .placeholder(R.drawable.sample).circleCrop().into(imageView)
+                    .placeholder(R.drawable.placeholder_img).into(imageView)
                 itemView.setOnClickListener{
                     navViewModel.toId = item.id
                     findNavController().navigate(R.id.action_viewPagerFragment_to_statFragment)

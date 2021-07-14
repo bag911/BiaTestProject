@@ -2,8 +2,9 @@ package bag.dev.biatestproject.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -12,15 +13,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import bag.dev.biatestproject.viewmodel.NavViewModel
 import bag.dev.biatestproject.R
-import bag.dev.biatestproject.viewmodel.TerminalViewModel
-import bag.dev.biatestproject.room.model.Transactions
 import bag.dev.biatestproject.databinding.FragmentStatBinding
-import com.bumptech.glide.Glide
+import bag.dev.biatestproject.room.model.Transactions
+import bag.dev.biatestproject.viewmodel.NavViewModel
+import bag.dev.biatestproject.viewmodel.TerminalViewModel
 import com.google.android.material.tabs.TabLayoutMediator
-import java.math.BigDecimal
-import java.math.RoundingMode
 
 
 class StatFragment : Fragment() {

@@ -1,6 +1,5 @@
 package bag.dev.biatestproject.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -12,12 +11,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import bag.dev.biatestproject.viewmodel.NavViewModel
 import bag.dev.biatestproject.R
-import bag.dev.biatestproject.room.model.Terminal
-import bag.dev.biatestproject.viewmodel.TerminalViewModel
 import bag.dev.biatestproject.databinding.FragmentFromBinding
 import bag.dev.biatestproject.hideKeyboard
+import bag.dev.biatestproject.room.model.Terminal
+import bag.dev.biatestproject.viewmodel.NavViewModel
+import bag.dev.biatestproject.viewmodel.TerminalViewModel
 import com.bumptech.glide.Glide
 import de.hdodenhof.circleimageview.CircleImageView
 import java.math.BigDecimal
@@ -70,7 +69,7 @@ class FromFragment : Fragment(), SearchView.OnQueryTextListener {
             fun inflateViews(item: Terminal) {
                 textName.text = item.name
                 Glide.with(requireContext()).load(item.mapUrl).circleCrop()
-                    .placeholder(R.drawable.sample).circleCrop().into(imageView)
+                    .placeholder(R.drawable.placeholder_img).circleCrop().into(imageView)
                 "${BigDecimal(item.distanceValue/1000.0).setScale(2,RoundingMode.HALF_EVEN)} км".also { textDistance.text = it }
                 itemView.setOnClickListener{
                     navViewModel.fromId = item.id

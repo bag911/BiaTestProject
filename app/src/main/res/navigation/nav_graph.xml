@@ -16,9 +16,7 @@
             app:argType="integer" />
         <action
             android:id="@+id/action_statFragment_to_viewPagerFragment"
-            app:destination="@id/viewPagerFragment"
-            app:popUpToInclusive="true"
-            app:popUpTo="@id/nav_graph" />
+            app:destination="@id/viewPagerFragment"/>
     </fragment>
     <fragment
         android:id="@+id/viewPagerFragment"
