@@ -70,7 +70,7 @@ class ToFragment : Fragment(), SearchView.OnQueryTextListener {
                     .placeholder(R.drawable.sample).circleCrop().into(imageView)
                 itemView.setOnClickListener{
                     navViewModel.toId = item.id
-                    findNavController().navigateUp()
+                    findNavController().navigate(R.id.action_viewPagerFragment_to_statFragment)
                 }
             }
         }

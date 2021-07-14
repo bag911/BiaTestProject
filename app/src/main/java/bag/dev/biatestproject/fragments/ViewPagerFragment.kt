@@ -22,7 +22,7 @@ class ViewPagerFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         appBarLogic = context as AppBarLogic
-        appBarLogic?.show()
+
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,20 +33,16 @@ class ViewPagerFragment : Fragment() {
         //ViewPager
         val tabLayout = viewPagerBinding.tabLayout
         val viewPager = viewPagerBinding.pager
-
         viewPager.adapter = ViewPagerAdapter(requireActivity())
         viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-
-
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->                                  //Connect TabLayout to ViewPager
             when(position){
                 0 -> tab.text = "Откуда"
                 else -> tab.text = "Куда"
             }
         }.attach()
-
         viewPager.currentItem = arguments?.getInt("pointer")!!
-
+        appBarLogic?.show()
         return viewPagerBinding.root
     }
 

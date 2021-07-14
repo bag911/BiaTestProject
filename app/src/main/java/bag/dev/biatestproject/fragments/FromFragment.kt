@@ -32,13 +32,6 @@ class FromFragment : Fragment(), SearchView.OnQueryTextListener {
     private lateinit var terminalViewModel: TerminalViewModel
     private val adapter = FromListAdapter()
 
-    private var appBarLogic:AppBarLogic ? = null
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        appBarLogic = context as AppBarLogic
-        appBarLogic?.show()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,7 +74,7 @@ class FromFragment : Fragment(), SearchView.OnQueryTextListener {
                 "${BigDecimal(item.distanceValue/1000.0).setScale(2,RoundingMode.HALF_EVEN)} км".also { textDistance.text = it }
                 itemView.setOnClickListener{
                     navViewModel.fromId = item.id
-                    findNavController().navigateUp()
+                    findNavController().navigate(R.id.action_viewPagerFragment_to_statFragment)
                 }
             }
         }

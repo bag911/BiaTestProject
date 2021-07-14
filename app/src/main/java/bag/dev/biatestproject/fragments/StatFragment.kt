@@ -2,18 +2,23 @@ package bag.dev.biatestproject.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import bag.dev.biatestproject.viewmodel.NavViewModel
 import bag.dev.biatestproject.R
 import bag.dev.biatestproject.viewmodel.TerminalViewModel
 import bag.dev.biatestproject.room.model.Transactions
 import bag.dev.biatestproject.databinding.FragmentStatBinding
 import com.bumptech.glide.Glide
+import com.google.android.material.tabs.TabLayoutMediator
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -22,7 +27,7 @@ class StatFragment : Fragment() {
 
     private var _statBinding: FragmentStatBinding? = null
     private val statBinding get() = _statBinding!!
-
+    private lateinit var adapter:ViewPagerStatAdapter
 
     private val navViewModel: NavViewModel by activityViewModels()
     private lateinit var terminalViewModel: TerminalViewModel
@@ -46,34 +51,28 @@ class StatFragment : Fragment() {
         _statBinding = FragmentStatBinding.inflate(inflater, container, false)
 
         terminalViewModel = ViewModelProvider(this).get(TerminalViewModel::class.java)
+        //ViewPager
+        val tabLayout = statBinding.tabLayout
+        val viewPager = statBinding.statViewPager
+        adapter = ViewPagerStatAdapter(requireActivity())
+        viewPager.adapter = adapter
+        viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->                                  //Connect TabLayout to ViewPager
+            when(position){
+                0 -> tab.text = "Терминал Откуда"
+                else -> tab.text = "Терминал Куда"
+            }
+        }.attach()
+        viewPager.currentItem = 0
 
-        //Checking selected From terminals
-        if (navViewModel.checkFromItemSelected()) {
-            terminalViewModel.getTerminalById(navViewModel.fromId)
-                .observe(viewLifecycleOwner, { terminal ->
-                    terminal.name.also { statBinding.nameFrom.text = it }
-                    terminal.address.also { statBinding.addressFrom.text = it }
-                    "${BigDecimal(terminal.distanceValue/1000.0).setScale(2,RoundingMode.HALF_EVEN)} км".also { statBinding.distanceFrom.text = it }
-                    statBinding.workTableFrom.text = terminal.worktables
-                    Glide.with(this).load(terminal.mapUrl)
-                        .placeholder(R.drawable.sample).into(statBinding.imageViewFrom)
-                })
-        }
-        //Checking selected To terminals
-        if (navViewModel.checkToItemSelected()) {
-            terminalViewModel.getTerminalById(navViewModel.toId)
-                .observe(viewLifecycleOwner, { terminal ->
-                    terminal.name.also { statBinding.nameTo.text = it }
-                    terminal.address.also { statBinding.addressTo.text = it }
-                    "${BigDecimal(terminal.distanceValue/1000.0).setScale(2,RoundingMode.HALF_EVEN)} км".also { statBinding.distanceTo.text = it }
-                    statBinding.workTableTo.text = terminal.worktables
-                    Glide.with(this).load(terminal.mapUrl)
-                        .placeholder(R.drawable.sample).into(statBinding.imageViewTo)
-                })
-        }
         appBarLogic?.hide()
 
         return statBinding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        adapter.notifyDataSetChanged()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -103,6 +102,16 @@ class StatFragment : Fragment() {
             )
         }
 
+    }
+    class ViewPagerStatAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
+        override fun getItemCount(): Int = 2
+
+        override fun createFragment(position: Int): Fragment {
+            return when(position){
+                0 -> ReviewStatFragment(0)
+                else -> ReviewStatFragment(1)
+            }
+        }
     }
 
     override fun onDestroyView() {
