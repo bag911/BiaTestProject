@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity(), AppBarLogic{
             )
     }
 
-    //Check user location
+    //Check user location and send req to get List of terminals
     private fun checkUserLocation() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
