@@ -16,6 +16,10 @@ import bag.dev.biatestproject.room.model.Terminal
 import bag.dev.biatestproject.viewmodel.TerminalViewModel
 import bag.dev.biatestproject.databinding.FragmentToBinding
 import bag.dev.biatestproject.hideKeyboard
+import com.bumptech.glide.Glide
+import de.hdodenhof.circleimageview.CircleImageView
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 class ToFragment : Fragment(), SearchView.OnQueryTextListener {
     private var _toBinding:FragmentToBinding ? = null
@@ -55,10 +59,15 @@ class ToFragment : Fragment(), SearchView.OnQueryTextListener {
 
         //Adapter ViewHolder
         inner class ViewHolder (view:View): RecyclerView.ViewHolder(view){
-            private val textView: TextView = view.findViewById(R.id.toTextView)
-            fun inflateViews(item: Terminal) {
-                textView.text = item.name
+            private val textName: TextView = view.findViewById(R.id.fromTextView)
+            private val imageView: CircleImageView = view.findViewById(R.id.circleMapImage)
+            private val textDistance: TextView = view.findViewById(R.id.textDistance)
 
+            fun inflateViews(item: Terminal) {
+                textName.text = item.name
+                "${BigDecimal(item.distanceValue/1000.0).setScale(2, RoundingMode.HALF_EVEN)} км".also { textDistance.text = it }
+                Glide.with(requireContext()).load(item.mapUrl).circleCrop()
+                    .placeholder(R.drawable.sample).circleCrop().into(imageView)
                 itemView.setOnClickListener{
                     navViewModel.toId = item.id
                     findNavController().navigateUp()
@@ -67,7 +76,7 @@ class ToFragment : Fragment(), SearchView.OnQueryTextListener {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val inflatedView = LayoutInflater.from(parent.context).inflate(R.layout.item_to_text,parent,false)
+            val inflatedView = LayoutInflater.from(parent.context).inflate(R.layout.item_from_text,parent,false)
             return ViewHolder(inflatedView)
         }
 

@@ -93,7 +93,7 @@ class TerminalViewModel(application: Application) : AndroidViewModel(application
                     for (j in i?.terminals?.terminal!!) {
                         if (j != null) {
                             for (w in j.worktables?.worktable!!) {
-                                strWorktables += "${w?.department}|${w?.monday}|${w?.tuesday}|${w?.wednesday}|${w?.thursday}|${w?.friday}|${w?.saturday}|${w?.sunday}|${w?.timetable}\n"
+                                strWorktables += "${w?.department}:\nПн: ${w?.monday}\nВт: ${w?.tuesday}\nСр: ${w?.wednesday}\nЧт: ${w?.thursday}\nПт: ${w?.friday}\nСб: ${w?.saturday}\nВс: ${w?.sunday}\n${w?.timetable}\n\n"
                             }
                             dataList.add(
                                 Terminal(

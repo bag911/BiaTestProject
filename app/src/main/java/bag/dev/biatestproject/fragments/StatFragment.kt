@@ -51,23 +51,23 @@ class StatFragment : Fragment() {
         if (navViewModel.checkFromItemSelected()) {
             terminalViewModel.getTerminalById(navViewModel.fromId)
                 .observe(viewLifecycleOwner, { terminal ->
-                    "Название: ${terminal.name}".also { statBinding.nameFrom.text = it }
-                    "Адрес: ${terminal.address}".also { statBinding.addressFrom.text = it }
-                    "Расстояние: ${BigDecimal(terminal.distanceValue/1000.0).setScale(2,RoundingMode.HALF_EVEN)}km".also { statBinding.distanceFrom.text = it }
+                    terminal.name.also { statBinding.nameFrom.text = it }
+                    terminal.address.also { statBinding.addressFrom.text = it }
+                    "${BigDecimal(terminal.distanceValue/1000.0).setScale(2,RoundingMode.HALF_EVEN)} км".also { statBinding.distanceFrom.text = it }
                     statBinding.workTableFrom.text = terminal.worktables
-                    Glide.with(this).load(terminal.mapUrl).circleCrop()
-                        .placeholder(R.drawable.sample).circleCrop().into(statBinding.imageViewFrom)
+                    Glide.with(this).load(terminal.mapUrl)
+                        .placeholder(R.drawable.sample).into(statBinding.imageViewFrom)
                 })
         }
         //Checking selected To terminals
         if (navViewModel.checkToItemSelected()) {
             terminalViewModel.getTerminalById(navViewModel.toId)
                 .observe(viewLifecycleOwner, { terminal ->
-                    "Название: ${terminal.name}".also { statBinding.nameTo.text = it }
-                    "Адрес: ${terminal.address}".also { statBinding.addressTo.text = it }
-                    "Расстояние: ${BigDecimal(terminal.distanceValue/1000.0).setScale(2,RoundingMode.HALF_EVEN)}km".also { statBinding.distanceTo.text = it }
+                    terminal.name.also { statBinding.nameTo.text = it }
+                    terminal.address.also { statBinding.addressTo.text = it }
+                    "${BigDecimal(terminal.distanceValue/1000.0).setScale(2,RoundingMode.HALF_EVEN)} км".also { statBinding.distanceTo.text = it }
                     statBinding.workTableTo.text = terminal.worktables
-                    Glide.with(this).load(terminal.mapUrl).circleCrop()
+                    Glide.with(this).load(terminal.mapUrl)
                         .placeholder(R.drawable.sample).into(statBinding.imageViewTo)
                 })
         }

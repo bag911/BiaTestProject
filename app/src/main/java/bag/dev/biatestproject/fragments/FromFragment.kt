@@ -18,6 +18,10 @@ import bag.dev.biatestproject.room.model.Terminal
 import bag.dev.biatestproject.viewmodel.TerminalViewModel
 import bag.dev.biatestproject.databinding.FragmentFromBinding
 import bag.dev.biatestproject.hideKeyboard
+import com.bumptech.glide.Glide
+import de.hdodenhof.circleimageview.CircleImageView
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 class FromFragment : Fragment(), SearchView.OnQueryTextListener {
 
@@ -67,10 +71,14 @@ class FromFragment : Fragment(), SearchView.OnQueryTextListener {
 
         //Adapter ViewHolder
         inner class ViewHolder (view:View): RecyclerView.ViewHolder(view){
-            private val textView: TextView = view.findViewById(R.id.fromTextView)
+            private val textName: TextView = view.findViewById(R.id.fromTextView)
+            private val imageView: CircleImageView = view.findViewById(R.id.circleMapImage)
+            private val textDistance: TextView = view.findViewById(R.id.textDistance)
             fun inflateViews(item: Terminal) {
-                textView.text = item.name
-
+                textName.text = item.name
+                Glide.with(requireContext()).load(item.mapUrl).circleCrop()
+                    .placeholder(R.drawable.sample).circleCrop().into(imageView)
+                "${BigDecimal(item.distanceValue/1000.0).setScale(2,RoundingMode.HALF_EVEN)} км".also { textDistance.text = it }
                 itemView.setOnClickListener{
                     navViewModel.fromId = item.id
                     findNavController().navigateUp()
