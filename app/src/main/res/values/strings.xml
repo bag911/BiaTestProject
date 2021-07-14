@@ -11,4 +11,5 @@
     <string name="description_of_from_image">Image of From Map</string>
     <string name="description_of_to_image">Image of To Map</string>
     <string name="fab_save_dscr">saving transaction data</string>
+    <string name="arrow_description">Arrow from one to another</string>
 </resources>

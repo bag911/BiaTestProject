@@ -19,7 +19,8 @@
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/from"
@@ -65,44 +66,6 @@
         app:layout_constraintGuide_begin="377dp" />
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imageViewFrom"
-        android:layout_width="0dp"
-        android:layout_height="130dp"
-        android:scaleType="center"
-        app:layout_constraintEnd_toStartOf="@+id/guideline5"
-        app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toTopOf="@+id/guideline2"
-        tools:src="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/addressFrom"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:maxWidth="310dp"
-        app:layout_constraintStart_toStartOf="@+id/nameFrom"
-        app:layout_constraintTop_toBottomOf="@+id/nameFrom"
-        tools:text="Address sadasdas dasd asd sad sad asd assdasdasd" />
-
-    <TextView
-        android:id="@+id/nameFrom"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewFrom"
-        tools:text="Name" />
-
-    <TextView
-        android:id="@+id/distanceFrom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@+id/guideline5"
-        app:layout_constraintTop_toTopOf="@+id/addressFrom"
-        tools:text="Distance" />
-
-    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imageViewTo"
         android:layout_width="0dp"
         android:layout_height="130dp"
@@ -128,6 +91,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/imageViewTo"
         tools:text="Name" />
@@ -155,30 +119,6 @@
         app:layout_constraintGuide_begin="16dp" />
 
     <ScrollView
-        android:id="@+id/scrollView1"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline6"
-        app:layout_constraintEnd_toStartOf="@+id/guideline5"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toBottomOf="@+id/addressFrom"
-        app:layout_constraintVertical_bias="1.0">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/workTableFrom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="List" />
-        </LinearLayout>
-    </ScrollView>
-
-    <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -186,7 +126,8 @@
         app:layout_constraintBottom_toTopOf="@+id/saveBtn"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toBottomOf="@+id/addressTo">
+        app:layout_constraintTop_toBottomOf="@+id/addressTo"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -206,10 +147,73 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_baseline_arrow_downward_24"
+        android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toTopOf="@+id/guideline6" />
+        app:layout_constraintTop_toTopOf="@+id/guideline6"
+        android:contentDescription="@string/arrow_description" />
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline6"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/addressFrom"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/workTableFrom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="List" />
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/distanceFrom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintTop_toBottomOf="@+id/nameFrom"
+        tools:text="Distance" />
+
+    <TextView
+        android:id="@+id/addressFrom"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxWidth="310dp"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/nameFrom"
+        tools:text="Address sadasdas dasd asd sad sad asd assdasdasd" />
+
+    <TextView
+        android:id="@+id/nameFrom"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewFrom"
+        tools:text="Name" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageViewFrom"
+        android:layout_width="0dp"
+        android:layout_height="130dp"
+        android:scaleType="center"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="@+id/guideline2"
+        tools:src="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
