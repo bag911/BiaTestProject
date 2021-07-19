@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity(), AppBarLogic{
 
     //Checking access of permission
     private fun checkPermission() {
-        super.onResume()
         val checkPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         val checkPermission2 = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
 
